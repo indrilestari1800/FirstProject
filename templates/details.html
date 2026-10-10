@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#F7F9FB;
+            --panel:#FFFFFF;
+            --border:#E2E8EF;
+            --ink:#1C2530;
+            --muted:#6B7684;
+            --sky:#2F80C8;
+            --sky-soft:#EAF3FA;
+        }
+
+        *{ box-sizing:border-box; }
+
+        body{
+            font-family:'Inter', sans-serif;
+            background:var(--bg);
+            color:var(--ink);
+            margin:0;
+            padding:44px 20px;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:auto;
+        }
+
+        /* ---------- Header ---------- */
+        header{
+            display:flex;
+            align-items:baseline;
+            justify-content:space-between;
+            border-bottom:2px solid var(--sky);
+            padding-bottom:14px;
+            margin-bottom:32px;
+        }
+        header h1{
+            font-family:'Source Serif 4', serif;
+            font-weight:700;
+            font-size:1.6em;
+            margin:0;
+            color:var(--ink);
+        }
+        header .tag{
+            font-size:12px;
+            font-weight:600;
+            letter-spacing:0.06em;
+            text-transform:uppercase;
+            color:var(--sky);
+        }
+
+        /* ---------- Feature panel ---------- */
+        .info-film{
+            display:flex;
+            gap:28px;
+            align-items:flex-start;
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:10px;
+            padding:26px;
+            margin:0 0 32px;
+        }
+        .info-film img{
+            width:170px;
+            flex:none;
+            border-radius:6px;
+            border:1px solid var(--border);
+        }
+        .poster-placeholder{
+            width:170px;
+            height:238px;
+            flex:none;
+            background:var(--sky-soft);
+            border:1px solid var(--border);
+            border-radius:6px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:var(--muted);
+            font-size:12px;
+            text-align:center;
+            padding:12px;
+        }
+        .info-film .detail{ flex:1; min-width:0; }
+        .info-film .detail h2{
+            font-family:'Source Serif 4', serif;
+            font-weight:700;
+            font-size:1.5em;
+            line-height:1.25;
+            margin:0 0 10px;
+        }
+        .info-film .detail .meta{
+            color:var(--sky);
+            font-size:0.85em;
+            font-weight:600;
+            letter-spacing:0.02em;
+            margin:0 0 14px;
+        }
+        .info-film .detail .desc{
+            color:#3B4652;
+            line-height:1.7;
+            font-size:0.96em;
+        }
+
+        /* ---------- Resolution groups ---------- */
+        .resolutions{
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .res-card{
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:10px;
+            overflow:hidden;
+        }
+        .res-card .card-header{
+            background:var(--sky-soft);
+            color:#1D5C90;
+            padding:11px 20px;
+            font-weight:700;
+            font-size:0.98em;
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:12px;
+            border-bottom:1px solid var(--border);
+        }
+        .res-card .card-header span:first-child{
+            min-width:0;
+            overflow-wrap:break-word;
+            line-height:1.35;
+        }
+        .res-card .card-header .count{
+            flex:none;
+            margin-top:1px;
+            font-size:11px;
+            font-weight:600;
+            color:#fff;
+            background:var(--sky);
+            padding:3px 10px;
+            border-radius:20px;
+            white-space:nowrap;
+        }
+        .card-body{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+            gap:10px;
+            padding:16px 20px;
+        }
+
+        .link-item a{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:6px;
+            padding:9px 14px;
+            border:1px solid var(--border);
+            border-radius:8px;
+            background:var(--sky-soft);
+            color:var(--ink);
+            text-decoration:none;
+            font-weight:600;
+            font-size:0.88em;
+            text-align:center;
+            transition:background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+        .link-item a:hover{
+            background:var(--sky);
+            border-color:var(--sky);
+            color:#fff;
+        }
+
+        .no-data{
+            color:var(--muted);
+            text-align:center;
+            padding:48px 20px;
+            font-size:0.95em;
+            border:1px dashed var(--border);
+            border-radius:10px;
+            background:var(--panel);
+        }
+
+        @media (max-width:600px){
+            .info-film{ flex-direction:column; align-items:center; text-align:center; }
+            .info-film .detail .desc{ text-align:left; }
+            header{ flex-direction:column; align-items:flex-start; gap:4px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>Details Movies</h1>
+        <span class="tag">{{ total if total else '' }}</span>
+    </header>
+
+    <!-- Feature panel -->
+    <div class="info-film">
+        {% if thumbnail %}
+            <img src="{{ thumbnail }}" alt="Thumbnail">
+        {% else %}
+            <div class="poster-placeholder">No Image</div>
+        {% endif %}
+        <div class="detail">
+            <h2>{{ title }}</h2>
+            <div class="meta">{{ meta }}</div>
+            <div class="desc">{{ description }}</div>
+        </div>
+    </div>
+
+    <!-- Card per Resolusi -->
+    {% if grouped %}
+        <div class="resolutions">
+            {% for res, links in grouped.items() %}
+                <div class="res-card">
+                    <div class="card-header">
+                        <span>{{ res }}</span>
+                        <span class="count">{{ links|length }} link</span>
+                    </div>
+                    <div class="card-body">
+                        {% for link in links %}
+                            <span class="link-item">
+                                <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.provider }}</a>
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-data">Tidak ada link download ditemukan.</div>
+    {% endif %}
+
+</div>
+</body>
+</html>

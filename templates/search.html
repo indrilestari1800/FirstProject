@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pencarian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="left">
+            <h1>Hasil Pencarian</h1>
+            <span class="tag">{{ total }} film ditemukan</span>
+            {% if keyword %}
+                <span class="tag search-tag">"{{ keyword }}"</span>
+            {% endif %}
+        </div>
+        <form class="search-form" action="{{ url_for('search') }}" method="get">
+            <input type="text" name="q" placeholder="Cari film..." value="{{ keyword if keyword else '' }}">
+            <button type="submit">Search</button>
+            {% if keyword %}
+                <a href="{{ url_for('index') }}" class="clear-btn">Clear</a>
+            {% endif %}
+        </form>
+    </header>
+
+    <div class="section-label">Hasil Pencarian</div>
+    <div class="movie-grid">
+        {% if movies %}
+            {% for movie in movies %}
+                <div class="movie-card">
+                    <div class="thumb">
+                        {% if movie.src %}
+                            <img src="{{ movie.src }}" alt="{{ movie.title }}" loading="lazy">
+                        {% else %}
+                            <div class="no-img">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="title">{{ movie.title }}</div>
+                        <a class="btn" href="{{ url_for('show_details', encoded_url=movie.href | b64encode) }}">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data">Tidak ada film ditemukan untuk kata kunci "{{ keyword }}".</div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="?page={{ current_page - 1 }}&q={{ keyword }}">« Prev</a>
+        {% else %}
+            <span class="disabled">« Prev</span>
+        {% endif %}
+
+        {% set window = 1 %}
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == 1 or p == total_pages or (p >= current_page - window and p <= current_page + window) %}
+                {% if p == current_page %}
+                    <span class="active">{{ p }}</span>
+                {% else %}
+                    <a href="?page={{ p }}&q={{ keyword }}">{{ p }}</a>
+                {% endif %}
+            {% elif p == current_page - window - 1 or p == current_page + window + 1 %}
+                <span class="dots">…</span>
+            {% endif %}
+        {% endfor %}
+
+        {% if current_page < total_pages %}
+            <a href="?page={{ current_page + 1 }}&q={{ keyword }}">Next »</a>
+        {% else %}
+            <span class="disabled">Next »</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

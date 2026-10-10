@@ -1,0 +1,13 @@
+<form action="https://advertisingcamps.com/taboola2/landing/" method="POST">
+<input name="url" type="hidden" value="https://oii.la/mNyeXyUXi"/>
+<input name="token" type="hidden" value="294119c11b8d9283b5d7a80a04999b0ac6e468e82026mNyeXyUXi2408aHR0cHM6Ly9tZWdhLm56L2ZpbGUvMzg1Vm1KcEkjaENsWVp5SVZOUGZoQXpVLU1TMHFvVWVmNENUVjJEaFhNNjB2aGNvVGlMcw=="/>
+<input name="mysite" type="hidden" value="clk.sh"/>
+<input name="c_d" type="hidden" value="20260824"/>
+<input name="c_t" type="hidden" value="1787559171"/>
+<input name="alias" type="hidden" value="mNyeXyUXi"/> <div class="">
+<div class="form-group text-center">
+<div class="form-group text-center">
+<div id="captchaShortlink" style="display: inline-block;"></div>
+</div>
+<button class="btn btn-primary btn-captcha" disabled="" id="continue" name="submit" onclick="window.open('https://hai8g.com/4/9172134', '_blank')" type="submit">Continue</button>
+</div></div></form>
